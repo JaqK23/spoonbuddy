@@ -120,14 +120,14 @@
     <div class="panel">
       <p class="stage" id="betaStage">Next</p>
       <h2 id="betaTitle">Closed beta</h2>
-      <p id="betaSub"></p>
-      <div class="counts">
+      <p id="betaSub">Not open yet.</p>
+      <div class="counts" id="betaCounts" hidden>
         <div class="count"><b id="nTesters">0</b><span>testers signed up</span></div>
         <div class="count"><b id="nDays">0</b><span>days of 14</span></div>
       </div>
       <ul class="days" id="dayRow" aria-hidden="true"></ul>
       <p class="sr" id="daysText"></p>
-      <p class="beta-note" id="betaNote"></p>
+      <p class="beta-note" id="betaNote">Google asks for 12 testers and 14 consecutive days before a public release.</p>
     </div>
 
   </div>
@@ -265,6 +265,10 @@ function renderBeta(cfg) {
 
   document.getElementById('nTesters').textContent = testers;
   document.getElementById('nDays').textContent = day;
+  // Revealed only once there are real figures behind them - the same thing the
+  // alpha panel does with alphaCounts. Without JS these stay hidden and the
+  // panel's own text carries the meaning.
+  document.getElementById('betaCounts').hidden = false;
 
   const row = document.getElementById('dayRow');
   row.innerHTML = '';
