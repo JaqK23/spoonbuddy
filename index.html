@@ -21,6 +21,7 @@
     }
   }
   *{box-sizing:border-box}
+  [hidden]{display:none !important}
   html{-webkit-text-size-adjust:100%}
   body{
     margin:0; background:var(--ground); color:var(--ink);
@@ -32,21 +33,28 @@
   a{color:inherit; text-decoration-color:var(--wood); text-underline-offset:3px}
   a:focus-visible,button:focus-visible{outline:3px solid var(--wood); outline-offset:3px; border-radius:6px}
 
-  /* ---------- beta strip ---------- */
-  .beta{background:var(--card); border-bottom:1px solid var(--line)}
-  .beta .wrap{padding-top:20px; padding-bottom:20px}
-  .beta h2{margin:0 0 2px; font-size:1rem; letter-spacing:.01em}
-  .beta p{margin:0; color:var(--muted); font-size:.94rem}
-  .counts{display:flex; flex-wrap:wrap; gap:10px 28px; margin:14px 0 0; align-items:flex-end}
+  /* ---------- status strip ---------- */
+  .status{background:var(--card); border-bottom:1px solid var(--line)}
+  .status .wrap{padding-top:22px; padding-bottom:22px;
+    display:grid; grid-template-columns:1fr 1fr; gap:28px}
+  .panel h2{margin:0 0 3px; font-size:1rem; letter-spacing:.01em}
+  .panel .stage{font-size:.75rem; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); margin:0 0 6px}
+  .panel p{margin:0; color:var(--muted); font-size:.94rem}
+  .counts{display:flex; flex-wrap:wrap; gap:10px 24px; margin:12px 0 0; align-items:flex-end}
   .count{min-width:0}
-  .count b{display:block; font-size:1.6rem; line-height:1.1; font-weight:700; font-variant-numeric:tabular-nums}
-  .count span{font-size:.82rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
-  .days{display:flex; flex-wrap:wrap; gap:5px; margin:14px 0 0; padding:0; list-style:none}
-  .days li{width:15px; height:31px}
+  .count b{display:block; font-size:1.5rem; line-height:1.1; font-weight:700; font-variant-numeric:tabular-nums}
+  .count span{font-size:.78rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em}
+  .days{display:flex; flex-wrap:wrap; gap:5px; margin:12px 0 0; padding:0; list-style:none}
+  .days li{width:14px; height:29px}
   .spoon{width:100%; height:100%; display:block; fill:var(--empty)}
   .days li.done .spoon{fill:url(#woodgrad)}
-  .beta-note{margin-top:12px; font-size:.9rem; color:var(--note);
+  .beta-note{margin-top:11px; font-size:.88rem; color:var(--note);
     background:var(--note-bg); padding:9px 12px; border-radius:10px}
+  @media (max-width:640px){
+    .status .wrap{grid-template-columns:1fr; gap:22px}
+    .panel + .panel{border-top:1px solid var(--line); padding-top:20px}
+  }
 
   /* ---------- page ---------- */
   header.hero{padding:48px 0 8px; text-align:center}
@@ -92,21 +100,36 @@
 </svg>
 
 <!-- ========================================================================
-     BETA PROGRESS STRIP
-     Edit the values in BETA at the bottom of this file. The rest works
-     itself out. Delete this whole <div class="beta"> block when beta ends.
+     STATUS STRIP: alpha on the left, closed beta on the right.
+     Nothing in here is edited by hand. The alpha numbers come live from
+     the GitHub API, and the beta side reads status.json in this folder.
      ===================================================================== -->
-<div class="beta" id="betaStrip" hidden>
+<div class="status">
   <div class="wrap">
-    <h2 id="betaTitle">Closed beta</h2>
-    <p id="betaSub"></p>
-    <div class="counts">
-      <div class="count"><b id="nTesters">0</b><span>testers signed up</span></div>
-      <div class="count"><b id="nDays">0</b><span>days of 14</span></div>
+
+    <div class="panel">
+      <p class="stage">Now</p>
+      <h2>Alpha</h2>
+      <p id="alphaSub">Early, rough, and installed by hand.</p>
+      <div class="counts" id="alphaCounts" hidden>
+        <div class="count"><b id="nWin">0</b><span>Windows downloads</span></div>
+        <div class="count"><b id="nDroid">0</b><span>Android downloads</span></div>
+      </div>
     </div>
-    <ul class="days" id="dayRow" aria-hidden="true"></ul>
-    <p class="sr" id="daysText"></p>
-    <p class="beta-note" id="betaNote"></p>
+
+    <div class="panel">
+      <p class="stage" id="betaStage">Next</p>
+      <h2 id="betaTitle">Closed beta</h2>
+      <p id="betaSub"></p>
+      <div class="counts">
+        <div class="count"><b id="nTesters">0</b><span>testers signed up</span></div>
+        <div class="count"><b id="nDays">0</b><span>days of 14</span></div>
+      </div>
+      <ul class="days" id="dayRow" aria-hidden="true"></ul>
+      <p class="sr" id="daysText"></p>
+      <p class="beta-note" id="betaNote"></p>
+    </div>
+
   </div>
 </div>
 
@@ -145,12 +168,20 @@
     will look unfinished and some of them won't work. Please don't rely on it for anything
     that matters yet.</p>
     <div class="btns">
-      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy-windows.zip">Windows</a>
-      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy.apk">Android (APK)</a>
+      <!-- Version-pinned links, so they need changing on every release.
+           Once fixed asset names exist (issue #30), swap both for:
+           https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy-windows.zip
+           https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy.apk
+           which never need updating again. -->
+      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/download/v0.1.3/SpoonBuddy-0.1.3.zip">Windows (.zip)</a>
+      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/download/v0.1.3/SpoonBuddy-0.1.3.apk">Android (.apk)</a>
     </div>
-    <p class="small">Neither one is in an app store yet, so both need installing by hand.
-    Instructions come with the download. If you get stuck partway through, tell me which step
-    you reached and I'll pick it up from there.</p>
+    <p class="small">Both files download straight away. Neither is in an app store yet, so both
+    need installing by hand. Instructions come with the download. If you get stuck partway
+    through, tell me which step you reached and I'll pick it up from there. Everything is also
+    on the
+    <a href="https://github.com/JaqK23/spoonbuddy/releases">releases page</a> if you would
+    rather see the list.</p>
   </section>
 
   <section>
@@ -178,80 +209,133 @@
 
 <script>
 /* ======================================================================
-   THE ONLY THING YOU EDIT
-   testers   - how many people are currently opted in to the closed test
-   startDate - 'YYYY-MM-DD', the day the 14 day clock started.
-               Leave it as null until the closed test actually begins.
+   The strip at the top of this page updates itself.
+
+   Alpha numbers  : pulled live from the public GitHub API, counting
+                    downloads of every .zip and .apk across all releases.
+                    Nothing to maintain.
+   Beta numbers   : read from status.json in this same folder. Edit that
+                    file and push it. Do not edit this script.
+
+   If either source is unavailable the page still renders sensibly, so a
+   rate limit or a missing file never leaves a broken strip on screen.
    ==================================================================== */
-const BETA = {
-  testers:   0,
-  startDate: null,   // e.g. '2026-09-15'
-  needed:    12,
-  totalDays: 14,
-  show:      true    // set false to hide the strip entirely
+
+const REPO   = 'JaqK23/spoonbuddy';
+const NEEDED = 12;      // testers Google asks for
+const DAYS   = 14;      // consecutive days Google asks for
+
+// Used if status.json cannot be read, e.g. when opening this file locally.
+const FALLBACK = {
+  testers: 0,
+  betaStartDate: null,
+  betaExpected: null,
+  showDownloadCount: true
 };
 
-(function () {
-  if (!BETA.show) return;
+(async function () {
+  let cfg = FALLBACK;
+  try {
+    const res = await fetch('status.json?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) cfg = Object.assign({}, FALLBACK, await res.json());
+  } catch (e) { /* keep the fallback, say nothing */ }
 
-  const strip = document.getElementById('betaStrip');
-  strip.hidden = false;
+  renderBeta(cfg);
+  if (cfg.showDownloadCount) renderAlpha();
+})();
 
+
+function renderBeta(cfg) {
   // Whole days elapsed, counted in local time so it ticks over at midnight.
+  // Rounded rather than floored: the spring clock change makes one "day"
+  // 23 hours long, and flooring would quietly lose a day from the count.
   let day = 0;
-  if (BETA.startDate) {
-    const [y, m, d] = BETA.startDate.split('-').map(Number);
+  if (cfg.betaStartDate) {
+    const [y, m, d] = cfg.betaStartDate.split('-').map(Number);
     const start = new Date(y, m - 1, d);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    // Rounded, not floored: the spring clock change makes one "day" 23 hours
-    // long, and flooring would quietly lose a day from the count.
-    day = Math.round((today - start) / 86400000) + 1;      // start day = day 1
-    day = Math.max(0, Math.min(BETA.totalDays, day));
+    day = Math.round((today - start) / 86400000) + 1;   // start day = day 1
+    day = Math.max(0, Math.min(DAYS, day));
   }
 
-  const short = Math.max(0, BETA.needed - BETA.testers);
-  const done  = day >= BETA.totalDays && short === 0;
+  const testers = Number(cfg.testers) || 0;
+  const short   = Math.max(0, NEEDED - testers);
+  const done    = day >= DAYS && short === 0;
 
-  document.getElementById('nTesters').textContent = BETA.testers;
+  document.getElementById('nTesters').textContent = testers;
   document.getElementById('nDays').textContent = day;
 
   const row = document.getElementById('dayRow');
-  for (let i = 1; i <= BETA.totalDays; i++) {
+  row.innerHTML = '';
+  for (let i = 1; i <= DAYS; i++) {
     const li = document.createElement('li');
     if (i <= day) li.className = 'done';
     li.innerHTML = '<svg class="spoon" viewBox="0 0 200 420"><use href="#spoonShape"/></svg>';
     row.appendChild(li);
   }
-  document.getElementById('daysText').textContent =
-    day + ' of ' + BETA.totalDays + ' days complete.';
+  document.getElementById('daysText').textContent = day + ' of ' + DAYS + ' days complete.';
 
+  const stage = document.getElementById('betaStage');
   const title = document.getElementById('betaTitle');
   const sub   = document.getElementById('betaSub');
   const note  = document.getElementById('betaNote');
+  const people = n => n + (n === 1 ? ' more person' : ' more people');
 
   if (done) {
+    stage.textContent = 'Done';
     title.textContent = 'Closed beta complete';
     sub.textContent = 'Fourteen days, twelve testers. Thank you, all of you.';
     note.textContent = 'Next comes applying to Google for a public release. That part is on me.';
-  } else if (!BETA.startDate) {
-    title.textContent = 'Closed beta: not started yet';
-    sub.textContent = 'Google needs ' + BETA.needed + ' testers signed up before the 14 days can begin.';
+  } else if (!cfg.betaStartDate) {
+    stage.textContent = 'Next';
+    title.textContent = 'Closed beta';
+    sub.textContent = cfg.betaExpected
+      ? 'Expected to start ' + cfg.betaExpected + '.'
+      : 'Not started yet.';
     note.textContent = short
-      ? short + ' more ' + (short === 1 ? 'person' : 'people') + ' and the clock starts.'
-      : 'Enough people. The clock starts as soon as the test opens.';
+      ? 'Google asks for ' + NEEDED + ' testers before the 14 days can begin. ' +
+        people(short) + ' and the clock starts.'
+      : 'Enough people signed up. The clock starts as soon as the test opens.';
   } else if (short) {
-    title.textContent = 'Closed beta, day ' + day + ' of ' + BETA.totalDays;
-    sub.textContent = 'Currently ' + BETA.testers + ' testers signed up. Google asks for ' + BETA.needed + '.';
+    stage.textContent = 'Running';
+    title.textContent = 'Closed beta, day ' + day + ' of ' + DAYS;
+    sub.textContent = 'Currently ' + testers + ' testers signed up. Google asks for ' + NEEDED + '.';
     note.textContent = 'Nothing for existing testers to do. Your days keep counting either way. ' +
-      'We just need ' + short + ' more ' + (short === 1 ? 'person' : 'people') + ' to sign up.';
+      'We just need ' + people(short) + ' to sign up.';
   } else {
-    title.textContent = 'Closed beta, day ' + day + ' of ' + BETA.totalDays;
-    sub.textContent = BETA.testers + ' testers signed up. Google asks for ' + BETA.needed + '.';
+    stage.textContent = 'Running';
+    title.textContent = 'Closed beta, day ' + day + ' of ' + DAYS;
+    sub.textContent = testers + ' testers signed up. Google asks for ' + NEEDED + '.';
     note.textContent = 'Nothing to do. You don’t have to open the app every day. The count ' +
       'only asks that you stay signed up, so low days cost nothing. That is rather the point.';
   }
-})();
+}
+
+
+async function renderAlpha() {
+  try {
+    const res = await fetch('https://api.github.com/repos/' + REPO + '/releases');
+    if (!res.ok) return;                      // rate limited or offline, leave the line as it is
+    const releases = await res.json();
+
+    let win = 0, droid = 0;
+    for (const rel of releases) {
+      for (const asset of (rel.assets || [])) {
+        const n = asset.name.toLowerCase();
+        const c = asset.download_count || 0;
+        if (n.endsWith('.apk')) droid += c;
+        else if (n.endsWith('.zip')) win += c;
+      }
+    }
+
+    document.getElementById('nWin').textContent = win;
+    document.getElementById('nDroid').textContent = droid;
+    document.getElementById('alphaCounts').hidden = false;
+    document.getElementById('alphaSub').textContent =
+      'Early, rough, and installed by hand. Downloads so far:';
+  } catch (e) { /* leave the plain line in place */ }
+}
 </script>
 </body>
 </html>

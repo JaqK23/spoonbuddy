@@ -1,0 +1,14 @@
+{
+  "_comment": "Edit this file to update the strip at the top of the site. Nothing else needs touching. Push it and the page picks it up.",
+
+  "testers": 0,
+  "betaStartDate": null,
+  "betaExpected": "around 30 August",
+
+  "_testers": "How many people are opted in to the closed test right now.",
+  "_betaStartDate": "null until the closed test actually opens, then 'YYYY-MM-DD'. The 14 day counter works itself out from this.",
+  "_betaExpected": "Free text shown while betaStartDate is null. Set to null to say nothing about timing.",
+
+  "showDownloadCount": true,
+  "_showDownloadCount": "false hides the alpha download numbers and shows a plain line instead."
+}
