@@ -75,8 +75,11 @@ private repository.
 
 ## Licence
 
-Not yet chosen, which means the default applies: **you may read this, and you may
-not reuse it.** A licence will be added here once it is decided.
+**SpoonBuddy is not open source.** See [LICENSE](LICENSE) — you may read this, and
+you may not reuse it without asking. Asking is fine; the answer may well be yes.
+
+That is a deliberate choice rather than an oversight. The Android app is going to
+be paid, and there is nothing in here that the world is short of.
 
 The bundled fonts carry their own licences, which travel inside the download:
 [Lexend](https://github.com/googlefonts/lexend) and
