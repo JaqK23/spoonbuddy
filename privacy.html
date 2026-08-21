@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy and data · SpoonBuddy</title>
+<meta name="description" content="What SpoonBuddy stores, where it goes, what never leaves your device, and how to have it deleted.">
+<style>
+  :root{
+    --ground:#F5E9D7; --card:#EADCC5; --ink:#2F2A25; --muted:#7A6E60;
+    --line:rgba(47,42,37,.16); --wood-hi:#8A5B33;
+    --warn:#8A3B1F; --warn-bg:rgba(201,112,90,.18);
+    --shadow:0 1px 2px rgba(47,42,37,.06), 0 6px 20px rgba(47,42,37,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#2B241E; --card:#362D26; --ink:#F2E8DA; --muted:#A3968A;
+      --line:rgba(242,232,218,.16); --warn:#F0AD90; --warn-bg:rgba(201,112,90,.16);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:ui-rounded,"SF Pro Rounded","Segoe UI Variable Display","Segoe UI",
+      system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 20px}
+  a{color:inherit; text-decoration-color:var(--wood-hi); text-underline-offset:3px}
+  a:focus-visible{outline:3px solid var(--wood-hi); outline-offset:3px; border-radius:6px}
+  .back{display:inline-block; padding:22px 0 0; font-size:.92rem; color:var(--muted)}
+  h1{font-size:2rem; margin:20px 0 4px; letter-spacing:-.02em}
+  .updated{color:var(--muted); font-size:.92rem; margin:0 0 8px}
+  h2{font-size:1.22rem; margin:32px 0 8px; letter-spacing:-.01em}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px; padding-left:1.2em}
+  li{margin-bottom:7px}
+  mark{background:var(--warn-bg); color:var(--warn); padding:1px 5px; border-radius:5px; font-weight:600}
+  .draft{background:var(--warn-bg); color:var(--warn); border-radius:12px; padding:16px 18px;
+    margin:18px 0 4px; font-size:.95rem}
+  .draft p:last-child{margin-bottom:0}
+  .box{background:var(--card); border-radius:14px; padding:18px 22px; box-shadow:var(--shadow); margin:20px 0}
+  .box p:last-child{margin-bottom:0}
+  footer{border-top:1px solid var(--line); margin-top:40px; padding:24px 0 60px;
+    color:var(--muted); font-size:.9rem}
+  footer a{color:var(--muted)}
+  @media (max-width:520px){ body{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="index.html">← SpoonBuddy</a>
+
+  <h1>Privacy and data</h1>
+  <p class="updated">Last updated: 21 August 2026</p>
+
+  <p>SpoonBuddy is made by Jaq Kennedy in the United Kingdom. This page sets out what the app
+  stores, where it goes, and what never leaves your device. It is written to be read rather
+  than to be legally impressive, and it says what actually happens.</p>
+
+  <h2>The short version</h2>
+  <p>Your activity log lives on your own device. If you turn syncing on, a copy also sits in a
+  Google Firebase database so that your phone and your computer agree with each other. There
+  are no adverts, no advertising identifiers, no analytics and no crash reporting. Nothing is
+  sold or handed to anyone for marketing.</p>
+
+  <h2>What is stored on your device</h2>
+  <ul>
+    <li>The activities you track: what you did, when you started and stopped, and the spoon
+    cost attached to each one.</li>
+    <li>Your settings: your daily spoon budget, your list of activities and their costs, and
+    how the app is set up.</li>
+    <li>Nothing else. The app does not read your files, contacts, calendar or location.</li>
+  </ul>
+
+  <h2>Signing in</h2>
+  <p>To sync between devices, the app needs a way to tell which data is yours, so you sign in
+  with an email address and a password. Both are handled by Firebase Authentication, which is
+  Google's service. Your password is stored by Firebase in a form nobody can read back, and it
+  never reaches me.</p>
+  <p>Your email address is stored by Firebase so that signing in on a second device brings you
+  back to the same data. Being the developer, I can see the list of registered addresses in
+  the Firebase console. I do not use it for anything: there is no mailing list, no newsletter,
+  and I will not write to you unless you have written to me first.</p>
+
+  <h2>What is stored in the cloud, if you turn syncing on</h2>
+  <p>Syncing is off until you switch it on. With it on, the activity log and settings described
+  above are held in Firebase Cloud Firestore, in Google's London region (europe-west2), so the
+  data stays in the UK.</p>
+  <p>The lawful basis, if you like that sort of thing, is that the data is processed to provide
+  a service you have asked for. Delete your account and it goes.</p>
+
+  <h2>Sending feedback</h2>
+  <p>The Windows app has a feedback button. Pressing it opens your own email program with a
+  message ready for you to read, edit and send. The app itself transmits nothing, and nothing
+  is sent until you send it.</p>
+  <p>The message contains what you write, plus the app version, your Windows and PowerShell
+  versions, your settings (theme, whether sync is on, the category you are pacing along with
+  its limits, and your chart span) and two counts: how many entries and how many activities
+  you have. Note that the category name is one you typed yourself, so it will appear as you
+  wrote it.</p>
+  <p>It does not include your entries, any times, any activity names, your email address or
+  any account identifier.</p>
+  <p>A copy is saved on your own computer at
+  <code>%LOCALAPPDATA%\SpoonBuddy\spoonbuddy-feedback.txt</code> and placed on your clipboard,
+  so you can still send the report if no email program is set up. Neither copy leaves your
+  computer. Feedback arrives at
+  <a href="mailto:spoonbuddy+support@ik.me">spoonbuddy+support@ik.me</a> and is kept in that
+  inbox while the issue is open.</p>
+  <p>The Android app has no feedback button.</p>
+
+  <h2>What is never collected</h2>
+  <ul>
+    <li>Adverts and advertising identifiers. None, at all.</li>
+    <li>Analytics of any kind. The app does not report that you opened it, how long you used
+    it, or which buttons you pressed.</li>
+    <li>Crash reporting. If it falls over, I only know because someone tells me.</li>
+    <li>Your name, address, phone number or date of birth.</li>
+    <li>Location.</li>
+    <li>Health records or diagnoses. The app has no idea why your day costs what it costs, and
+    does not ask.</li>
+  </ul>
+
+  <h2>Paying for sync</h2>
+  <p>Any purchase is handled entirely by Google Play. Google takes the payment and the app is
+  told only whether it has been made. Card details never reach SpoonBuddy or me.</p>
+
+  <h2 id="delete">Deleting your account and your data</h2>
+  <p>Uninstalling the app removes everything held on that device.</p>
+  <p>To have your account and its synced data deleted, email
+  <a href="mailto:spoonbuddy+privacy@ik.me">spoonbuddy+privacy@ik.me</a> from the address you
+  signed up with, or tell me which address to remove. I will delete the account and the data
+  attached to it, and confirm when it is done.</p>
+  <div class="box">
+    <p>Under UK data protection law you can also ask for a copy of what is held about you, ask
+    for it to be corrected, or object to it being held at all. Same address, and there is no
+    charge.</p>
+  </div>
+
+  <h2>Children</h2>
+  <p>SpoonBuddy is not designed for or aimed at children under 13, and is not marketed to
+  them.</p>
+
+  <h2>Changes to this page</h2>
+  <p>If what the app does changes, this page changes with it and the date at the top moves.
+  While the app is still in testing, that may happen fairly often.</p>
+
+  <h2>Contact</h2>
+  <p>For anything privacy related, <a href="mailto:spoonbuddy+privacy@ik.me">spoonbuddy+privacy@ik.me</a>.
+  For everything else, <a href="mailto:spoonbuddy+support@ik.me">spoonbuddy+support@ik.me</a>.
+  One person reads both, so it may not be instant, but it is read.</p>
+
+  <footer>
+    <p><a href="index.html">Back to SpoonBuddy</a> · <a href="squish.html">Meet Squish</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

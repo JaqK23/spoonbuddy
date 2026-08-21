@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet Squish · SpoonBuddy</title>
+<meta name="description" content="Squish explains spoon theory, and what SpoonBuddy does with it.">
+<style>
+  :root{
+    --ground:#F5E9D7; --card:#EADCC5; --ink:#2F2A25; --muted:#7A6E60;
+    --line:rgba(47,42,37,.16); --wood-hi:#8A5B33;
+    --shadow:0 1px 2px rgba(47,42,37,.06), 0 6px 20px rgba(47,42,37,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#2B241E; --card:#362D26; --ink:#F2E8DA; --muted:#A3968A;
+      --line:rgba(242,232,218,.16);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:ui-rounded,"SF Pro Rounded","Segoe UI Variable Display","Segoe UI",
+      system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:0 20px}
+  a{color:inherit; text-decoration-color:var(--wood-hi); text-underline-offset:3px}
+  a:focus-visible{outline:3px solid var(--wood-hi); outline-offset:3px; border-radius:6px}
+  .back{display:inline-block; padding:22px 0 0; font-size:.92rem; color:var(--muted)}
+
+  .meet{display:flex; gap:22px; align-items:center; padding:22px 0 8px; flex-wrap:wrap}
+  .meet svg.squish{width:120px; height:252px; flex:none}
+  .bubble{
+    position:relative; background:var(--card); border-radius:16px; padding:16px 20px;
+    box-shadow:var(--shadow); flex:1 1 260px; font-size:1.05rem;
+  }
+  .bubble::before{
+    content:''; position:absolute; left:-9px; top:44px; width:18px; height:18px;
+    background:var(--card); transform:rotate(45deg); border-radius:3px;
+  }
+  h1{font-size:2rem; margin:26px 0 0; letter-spacing:-.02em}
+  h2{font-size:1.3rem; margin:34px 0 10px; letter-spacing:-.01em}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px; padding-left:1.2em}
+  li{margin-bottom:7px}
+  .card{background:var(--card); border-radius:14px; padding:18px 22px; box-shadow:var(--shadow); margin:22px 0}
+  .card p:last-child{margin-bottom:0}
+  footer{border-top:1px solid var(--line); margin-top:40px; padding:24px 0 60px;
+    color:var(--muted); font-size:.9rem}
+  footer a{color:var(--muted)}
+  @media (max-width:520px){ .meet svg.squish{width:96px; height:202px} body{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="index.html">← SpoonBuddy</a>
+
+  <div class="meet">
+    <!-- Squish, 'hello' pose: pupils apart, full smile -->
+    <svg class="squish" viewBox="0 0 200 420" role="img" aria-label="Squish, a wooden spoon with large googly eyes and a smile">
+      <defs>
+        <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"    stop-color="#9E6B3E"/>
+          <stop offset="0.28" stop-color="#D5A06A"/>
+          <stop offset="0.55" stop-color="#BC8551"/>
+          <stop offset="0.78" stop-color="#DFB07C"/>
+          <stop offset="1"    stop-color="#8A5B33"/>
+        </linearGradient>
+        <path id="body" d="M100 15C136 15 154 44 154 80C154 112 139 133 123 149C114 156 110 161 108 172
+          C106 200 107 238 110 268C113 300 120 326 121 352C121 378 112 396 100 396
+          C88 396 79 378 79 352C80 326 87 300 90 268C93 238 94 200 92 172
+          C90 161 86 156 77 149C61 133 46 112 46 80C46 44 64 15 100 15Z"/>
+        <clipPath id="inBody"><use href="#body"/></clipPath>
+      </defs>
+
+      <use href="#body" fill="url(#wood)"/>
+      <g clip-path="url(#inBody)">
+        <ellipse cx="78" cy="58" rx="24" ry="33" fill="#fff" opacity=".30" transform="rotate(-18 78 58)"/>
+        <ellipse cx="95" cy="270" rx="5"  ry="95" fill="#fff" opacity=".22"/>
+        <ellipse cx="143" cy="92" rx="20" ry="42" fill="#3A2617" opacity=".13" transform="rotate(10 143 92)"/>
+      </g>
+      <use href="#body" fill="none" stroke="#3A2617" stroke-width="7" stroke-linejoin="round"/>
+
+      <ellipse cx="66" cy="116" rx="12" ry="7" fill="#C9705A" opacity=".55"/>
+      <ellipse cx="134" cy="114" rx="12" ry="7" fill="#C9705A" opacity=".55"/>
+      <path d="M87 122q14 13 27 0" fill="none" stroke="#3A2617" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- eyes: overlapping, overhanging the outline -->
+      <circle cx="73" cy="76" r="30" fill="#FDFBF6" stroke="#3A2617" stroke-width="5"/>
+      <circle cx="131" cy="72" r="30" fill="#FDFBF6" stroke="#3A2617" stroke-width="5"/>
+      <g fill="#2B1A0F">
+        <circle cx="64" cy="82" r="11"/>
+        <circle cx="140" cy="78" r="11"/>
+      </g>
+      <g fill="#fff">
+        <circle cx="60.6" cy="78.6" r="4.2"/><circle cx="67" cy="85.4" r="2" opacity=".7"/>
+        <circle cx="136.6" cy="74.6" r="4.2"/><circle cx="143" cy="81.4" r="2" opacity=".7"/>
+      </g>
+    </svg>
+
+    <div class="bubble">
+      <p style="margin:0">Ah, spoon theory. Shall I explain?</p>
+    </div>
+  </div>
+
+  <h1>Hello, I'm Squish</h1>
+
+  <p>I live on this page and nowhere else. I don't turn up while you're using the app, I won't
+  interrupt you halfway through logging a rotten day, and I will never ask whether you'd like
+  help writing a letter. You came here, so you're presumably in the mood for me.</p>
+
+  <h2>Spoon theory, briefly</h2>
+
+  <p>Christine Miserandino came up with it in a diner while explaining lupus to a friend. She
+  gathered up the spoons from the tables, handed them over, and said: this is what you get
+  today. Getting dressed costs one. Cooking costs another. Being out among people costs
+  several. When they're gone they're gone, and tomorrow's spoons are not here yet.</p>
+
+  <p>The spoons themselves were incidental. The point was that some people start every day
+  with a countable amount and have to spend it on purpose, while everybody else spends without
+  ever noticing there was a number.</p>
+
+  <h2>What SpoonBuddy does with that</h2>
+
+  <ul>
+    <li>You say what you're doing, and SpoonBuddy prices it by how draining it is for you.
+    Not by how draining somebody else reckons it ought to be.</li>
+    <li>It keeps a running balance for the day, drawn as a spoon that empties as you spend.</li>
+    <li>A bad night's sleep starts you lower the next morning, because it does.</li>
+    <li>The balance is allowed to go below zero. The app calls that borrowing from tomorrow.
+    It happens, sometimes there's no choice about it, and you will not be told off.</li>
+  </ul>
+
+  <div class="card">
+    <p><strong>Things it will never do:</strong> congratulate you for pushing through. Show you
+    a streak you can break. Hold yesterday up as a target. Suggest that a low day says
+    something about your character.</p>
+    <p>It's a fuel gauge. A fuel gauge has no opinions about your driving.</p>
+  </div>
+
+  <h2>Why a spoon with eyes on it</h2>
+
+  <p>The balance gauge in the app is itself a spoon, and every colour in there is already
+  carrying information. Green through orange to red tells you where you are, and bone means
+  empty. I'm wood, which is the one warm colour left that isn't trying to tell you
+  anything.</p>
+
+  <p>My eyes don't fit my face properly. I've made my peace with that.</p>
+
+  <footer>
+    <p>Spoon theory was coined by Christine Miserandino. SpoonBuddy has no connection to her or
+    to anyone else.</p>
+    <p><a href="index.html">Back to SpoonBuddy</a> · <a href="privacy.html">Privacy</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

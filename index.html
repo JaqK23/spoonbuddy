@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpoonBuddy, an energy pacing app</title>
+<meta name="description" content="SpoonBuddy works out what your day costs you and shows you what's left. Going below zero is allowed.">
+<style>
+  :root{
+    --ground:#F5E9D7; --card:#EADCC5; --ink:#2F2A25; --muted:#7A6E60;
+    --line:rgba(47,42,37,.16); --wood:#9E6B3E; --wood-lo:#D5A06A; --wood-hi:#8A5B33;
+    --empty:rgba(47,42,37,.13); --note:#8A5B33; --note-bg:rgba(197,140,80,.16);
+    --shadow:0 1px 2px rgba(47,42,37,.06), 0 6px 20px rgba(47,42,37,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#2B241E; --card:#362D26; --ink:#F2E8DA; --muted:#A3968A;
+      --line:rgba(242,232,218,.16); --empty:rgba(242,232,218,.14);
+      --note:#E7BE8C; --note-bg:rgba(197,140,80,.14);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+    }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:ui-rounded,"SF Pro Rounded","Segoe UI Variable Display","Segoe UI",
+      system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.6;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 20px}
+  a{color:inherit; text-decoration-color:var(--wood); text-underline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--wood); outline-offset:3px; border-radius:6px}
+
+  /* ---------- beta strip ---------- */
+  .beta{background:var(--card); border-bottom:1px solid var(--line)}
+  .beta .wrap{padding-top:20px; padding-bottom:20px}
+  .beta h2{margin:0 0 2px; font-size:1rem; letter-spacing:.01em}
+  .beta p{margin:0; color:var(--muted); font-size:.94rem}
+  .counts{display:flex; flex-wrap:wrap; gap:10px 28px; margin:14px 0 0; align-items:flex-end}
+  .count{min-width:0}
+  .count b{display:block; font-size:1.6rem; line-height:1.1; font-weight:700; font-variant-numeric:tabular-nums}
+  .count span{font-size:.82rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+  .days{display:flex; flex-wrap:wrap; gap:5px; margin:14px 0 0; padding:0; list-style:none}
+  .days li{width:15px; height:31px}
+  .spoon{width:100%; height:100%; display:block; fill:var(--empty)}
+  .days li.done .spoon{fill:url(#woodgrad)}
+  .beta-note{margin-top:12px; font-size:.9rem; color:var(--note);
+    background:var(--note-bg); padding:9px 12px; border-radius:10px}
+
+  /* ---------- page ---------- */
+  header.hero{padding:48px 0 8px; text-align:center}
+  .mark{display:flex; align-items:center; justify-content:center; gap:12px}
+  .mark svg{width:38px; height:80px}
+  .mark .spoon{fill:url(#woodgrad)}
+  h1{font-size:2.5rem; margin:0; letter-spacing:-.02em}
+  .tagline{font-size:1.18rem; color:var(--muted); margin:10px auto 0; max-width:32ch}
+  main section{padding:34px 0; border-top:1px solid var(--line)}
+  main section:first-of-type{border-top:0}
+  h2{font-size:1.35rem; margin:0 0 12px; letter-spacing:-.01em}
+  p{margin:0 0 14px}
+  .lead{font-size:1.06rem}
+  .btns{display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 6px}
+  .btn{display:inline-block; padding:12px 20px; border-radius:11px; background:var(--wood-hi);
+    color:#FFF6EA; text-decoration:none; font-weight:600; box-shadow:var(--shadow)}
+  .small{font-size:.9rem; color:var(--muted)}
+  footer{border-top:1px solid var(--line); padding:28px 0 60px; color:var(--muted); font-size:.9rem}
+  footer a{color:var(--muted)}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+  @media (max-width:420px){ h1{font-size:2.1rem} body{font-size:16px} }
+</style>
+</head>
+<body>
+
+<!-- shared spoon shape + wood gradient, used by every spoon on the page -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <linearGradient id="woodgrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#9E6B3E"/>
+      <stop offset="0.28" stop-color="#D5A06A"/>
+      <stop offset="0.55" stop-color="#BC8551"/>
+      <stop offset="0.78" stop-color="#DFB07C"/>
+      <stop offset="1"    stop-color="#8A5B33"/>
+    </linearGradient>
+    <symbol id="spoonShape" viewBox="0 0 200 420">
+      <path d="M100 15C136 15 154 44 154 80C154 112 139 133 123 149C114 156 110 161 108 172
+      C106 200 107 238 110 268C113 300 120 326 121 352C121 378 112 396 100 396
+      C88 396 79 378 79 352C80 326 87 300 90 268C93 238 94 200 92 172
+      C90 161 86 156 77 149C61 133 46 112 46 80C46 44 64 15 100 15Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ========================================================================
+     BETA PROGRESS STRIP
+     Edit the values in BETA at the bottom of this file. The rest works
+     itself out. Delete this whole <div class="beta"> block when beta ends.
+     ===================================================================== -->
+<div class="beta" id="betaStrip" hidden>
+  <div class="wrap">
+    <h2 id="betaTitle">Closed beta</h2>
+    <p id="betaSub"></p>
+    <div class="counts">
+      <div class="count"><b id="nTesters">0</b><span>testers signed up</span></div>
+      <div class="count"><b id="nDays">0</b><span>days of 14</span></div>
+    </div>
+    <ul class="days" id="dayRow" aria-hidden="true"></ul>
+    <p class="sr" id="daysText"></p>
+    <p class="beta-note" id="betaNote"></p>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="mark">
+      <svg viewBox="0 0 200 420" aria-hidden="true"><use href="#spoonShape" class="spoon"/></svg>
+      <h1>SpoonBuddy</h1>
+    </div>
+    <p class="tagline">Know what you've got left, without being told off for it.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <p class="lead">SpoonBuddy is an energy pacing app built on spoon theory. You tell it what
+    you're doing. It works out what that costs you, and keeps a running total of what's left
+    for the day.</p>
+    <p>The balance is allowed to go below zero. When it does, the app calls it borrowing from
+    tomorrow, because that is what it is, and because plenty of days give you no other option.
+    A bad night's sleep starts you lower the next morning for the same reason.</p>
+    <p>There's no streak to keep and no score to beat. Nothing in it will congratulate you for
+    pushing through. If you'd like the longer explanation,
+    <a href="squish.html">Squish does a better job of it</a> than I do.</p>
+  </section>
+
+  <!-- ==================================================================
+       ALPHA BLOCK. Remove this whole <section> when beta starts and the
+       alpha install files come off the repo. Replace it with a "join the
+       beta" link to the Play Store closed test opt-in URL.
+       =============================================================== -->
+  <section id="get">
+    <h2>Get it</h2>
+    <p>SpoonBuddy is at the alpha stage, which means early, rough and changing often. Things
+    will look unfinished and some of them won't work. Please don't rely on it for anything
+    that matters yet.</p>
+    <div class="btns">
+      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy-windows.zip">Windows</a>
+      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy.apk">Android (APK)</a>
+    </div>
+    <p class="small">Neither one is in an app store yet, so both need installing by hand.
+    Instructions come with the download. If you get stuck partway through, tell me which step
+    you reached and I'll pick it up from there.</p>
+  </section>
+
+  <section>
+    <h2>What it costs</h2>
+    <p>Nothing at the moment. While it's in testing, both versions are free.</p>
+    <p>When the Android app reaches the Play Store properly there will be a charge on it.
+    I'll say what that is well before it happens, and testers won't be caught out by it.</p>
+  </section>
+
+  <section>
+    <h2>Get in touch</h2>
+    <p>Anything confusing, ugly, broken, or that made you feel judged. That last one above all
+    else. Write to
+    <a href="mailto:spoonbuddy+support@ik.me">spoonbuddy+support@ik.me</a>, or use the report
+    button inside the app if that's easier.</p>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Spoon theory was coined by Christine Miserandino. SpoonBuddy has no connection to her or
+  to anyone else. It's one person's app.</p>
+  <p><a href="privacy.html">Privacy</a> · <a href="squish.html">Meet Squish</a></p>
+</footer>
+
+<script>
+/* ======================================================================
+   THE ONLY THING YOU EDIT
+   testers   - how many people are currently opted in to the closed test
+   startDate - 'YYYY-MM-DD', the day the 14 day clock started.
+               Leave it as null until the closed test actually begins.
+   ==================================================================== */
+const BETA = {
+  testers:   0,
+  startDate: null,   // e.g. '2026-09-15'
+  needed:    12,
+  totalDays: 14,
+  show:      true    // set false to hide the strip entirely
+};
+
+(function () {
+  if (!BETA.show) return;
+
+  const strip = document.getElementById('betaStrip');
+  strip.hidden = false;
+
+  // Whole days elapsed, counted in local time so it ticks over at midnight.
+  let day = 0;
+  if (BETA.startDate) {
+    const [y, m, d] = BETA.startDate.split('-').map(Number);
+    const start = new Date(y, m - 1, d);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // Rounded, not floored: the spring clock change makes one "day" 23 hours
+    // long, and flooring would quietly lose a day from the count.
+    day = Math.round((today - start) / 86400000) + 1;      // start day = day 1
+    day = Math.max(0, Math.min(BETA.totalDays, day));
+  }
+
+  const short = Math.max(0, BETA.needed - BETA.testers);
+  const done  = day >= BETA.totalDays && short === 0;
+
+  document.getElementById('nTesters').textContent = BETA.testers;
+  document.getElementById('nDays').textContent = day;
+
+  const row = document.getElementById('dayRow');
+  for (let i = 1; i <= BETA.totalDays; i++) {
+    const li = document.createElement('li');
+    if (i <= day) li.className = 'done';
+    li.innerHTML = '<svg class="spoon" viewBox="0 0 200 420"><use href="#spoonShape"/></svg>';
+    row.appendChild(li);
+  }
+  document.getElementById('daysText').textContent =
+    day + ' of ' + BETA.totalDays + ' days complete.';
+
+  const title = document.getElementById('betaTitle');
+  const sub   = document.getElementById('betaSub');
+  const note  = document.getElementById('betaNote');
+
+  if (done) {
+    title.textContent = 'Closed beta complete';
+    sub.textContent = 'Fourteen days, twelve testers. Thank you, all of you.';
+    note.textContent = 'Next comes applying to Google for a public release. That part is on me.';
+  } else if (!BETA.startDate) {
+    title.textContent = 'Closed beta: not started yet';
+    sub.textContent = 'Google needs ' + BETA.needed + ' testers signed up before the 14 days can begin.';
+    note.textContent = short
+      ? short + ' more ' + (short === 1 ? 'person' : 'people') + ' and the clock starts.'
+      : 'Enough people. The clock starts as soon as the test opens.';
+  } else if (short) {
+    title.textContent = 'Closed beta, day ' + day + ' of ' + BETA.totalDays;
+    sub.textContent = 'Currently ' + BETA.testers + ' testers signed up. Google asks for ' + BETA.needed + '.';
+    note.textContent = 'Nothing for existing testers to do. Your days keep counting either way. ' +
+      'We just need ' + short + ' more ' + (short === 1 ? 'person' : 'people') + ' to sign up.';
+  } else {
+    title.textContent = 'Closed beta, day ' + day + ' of ' + BETA.totalDays;
+    sub.textContent = BETA.testers + ' testers signed up. Google asks for ' + BETA.needed + '.';
+    note.textContent = 'Nothing to do. You don’t have to open the app every day. The count ' +
+      'only asks that you stay signed up, so low days cost nothing. That is rather the point.';
+  }
+})();
+</script>
+</body>
+</html>
