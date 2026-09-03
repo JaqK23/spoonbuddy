@@ -3,7 +3,7 @@
 
   "testers": 3,
   "betaStartDate": null,
-  "betaExpected": "around 9 September",
+  "betaExpected": "mid September",
 
   "_testers": "How many people are opted in to the closed test right now.",
   "_betaStartDate": "null until the closed test actually opens, then 'YYYY-MM-DD'. The 14 day counter works itself out from this.",
