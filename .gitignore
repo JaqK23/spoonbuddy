@@ -1,6 +1,6 @@
 # SpoonBuddy - THE PUBLIC REPOSITORY. THIS TREE IS PUBLIC THE MOMENT IT IS PUSHED.
 #
-# Written 2026-09-03, at Jaq's instruction: "can you exclude review notes and shots
+# Written 2026-09-03, on the developer's instruction: "can you exclude review notes and shots
 # from being committed or pushed?" and "and my personal settings and files".
 #
 # THERE WAS NO IGNORE FILE HERE AT ALL UNTIL TODAY, and this is the tree where it
@@ -42,7 +42,7 @@ local/
 
 # ------------------------------------------------------------------ renders --
 # A RENDER OF THE RUNNING APP IS THE SAME DATA AS activities.csv, IN A FORM NO
-# IGNORE RULE AND NO GREP CAN READ. spoonbuddy-private #117 is the case: eight
+# IGNORE RULE AND NO GREP CAN READ. The case this rule comes from: eight
 # pictures of the running app against real records, tracked for two days, past an
 # ignore file that was working perfectly and had never been told about the folder.
 review-shots/

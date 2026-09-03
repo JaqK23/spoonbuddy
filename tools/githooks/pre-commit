@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# SpoonBuddy pre-commit hook - REFUSE JAQ'S OWN RECORDS AND ANY PICTURE OF THEM.
+# SpoonBuddy pre-commit hook - REFUSE THE USER'S OWN RECORDS AND ANY PICTURE OF THEM.
 #
-# spoonbuddy-private #117: eight PNGs of the running app against her real data, plus
+# The case this comes from: eight PNGs of the running app against real records, plus
 # her settings file and a copy of it out of a backup, were tracked for two days. The
 # ignore file was working - it had simply never been told about the folder, because
 # its rules named design/screenshots/ and four CSVs and the pictures matched nothing.
@@ -42,7 +42,7 @@ for f in $added; do
         spoonbuddy-pos.txt|spoonbuddy-current.txt|spoonbuddy-peer.txt| \
         spoonbuddy-feedback.txt|spoonbuddy-error.log|activities.csv| \
         stints.tsv|paced.tsv|sync-state.tsv|last-activity.txt|chart-days.txt)
-            hit="a file the live app writes - this is her record, not a fixture" ;;
+            hit="a file the live app writes - a real record, not a fixture" ;;
     esac
 
     # Anywhere a review, a shot or a backup is kept. A FOLDER match, because the
@@ -74,11 +74,11 @@ done
 [ -z "$bad" ] && exit 0
 
 echo ""
-echo "REFUSING THIS COMMIT: it adds files that look like Jaq's own records."
+echo "REFUSING THIS COMMIT: it adds files that look like the user's own records."
 echo "$bad"
 echo ""
 echo "Nothing has been unstaged and nothing has been deleted - the files are"
-echo "untouched on disk. If this is her data it belongs in %LOCALAPPDATA%\\SpoonBuddy"
+echo "untouched on disk. If this is real data it belongs in %LOCALAPPDATA%\\SpoonBuddy"
 echo "or in the working root's local\\ folder, neither of which is in a repository."
 echo ""
 echo "IF IT IS GENUINELY A FIXTURE, GIVE IT A FIXTURE'S NAME - fixture-log.csv or"
