@@ -1,0 +1,5 @@
+# A SHELL SCRIPT CHECKED OUT WITH CRLF DOES NOT RUN: /bin/sh reads the CR as part
+# of the interpreter path and fails with "bad interpreter". core.autocrlf is true on
+# this machine, so git WOULD do exactly that to the hook on a fresh clone - it warned
+# about it on the very commit that added it.
+tools/githooks/* text eol=lf
