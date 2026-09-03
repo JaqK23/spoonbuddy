@@ -2,10 +2,10 @@
 #
 # SpoonBuddy pre-commit hook - REFUSE THE USER'S OWN RECORDS AND ANY PICTURE OF THEM.
 #
-# The case this comes from: eight PNGs of the running app against real records, plus
-# her settings file and a copy of it out of a backup, were tracked for two days. The
-# ignore file was working - it had simply never been told about the folder, because
-# its rules named design/screenshots/ and four CSVs and the pictures matched nothing.
+# WHY A HOOK AND NOT ONLY AN IGNORE RULE. A rule is a default; this is a refusal.
+# An ignore file only ever covers what somebody thought to name, and the thing it has
+# never been told about is the thing that gets in - a folder one path segment from a
+# named one, matching nothing, is enough.
 #
 # WHY A HOOK AS WELL AS AN IGNORE RULE. An ignore rule is a DEFAULT and this is a
 # REFUSAL. It stops the three things a rule cannot:
@@ -53,7 +53,7 @@ for f in $added; do
         */local/*|local/*)
             hit="private/local/ is a scratch tree and is under no repository" ;;
         */backups/*|backups/*|*/backup-*|backup-*)
-            hit="a backup of her data" ;;
+            hit="a backup of somebody's data" ;;
     esac
 
     # A picture or a PDF of a screen. The dangerous class CONTENTS.md names: personal
