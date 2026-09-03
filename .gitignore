@@ -1,0 +1,72 @@
+# SpoonBuddy - THE PUBLIC REPOSITORY. THIS TREE IS PUBLIC THE MOMENT IT IS PUSHED.
+#
+# Written 2026-09-03, at Jaq's instruction: "can you exclude review notes and shots
+# from being committed or pushed?" and "and my personal settings and files".
+#
+# THERE WAS NO IGNORE FILE HERE AT ALL UNTIL TODAY, and this is the tree where it
+# matters most. private\app\ reaches people one step later, through a release;
+# private\ is private; this is served by GitHub Pages the moment it is pushed.
+# CLAUDE.md already says to treat the website as the strictest of the trees rather
+# than the loosest because it is small - and it had the least protection of any.
+#
+# What is meant to be here is six files: the site, the licence, the readme and
+# status.json. Anything else is a question, which is why private\tools\audit-areas.ps1
+# is an ALLOW-LIST and this is only the second line.
+
+# ---------------------------------------------------------- personal data --
+# None of these should ever be in this tree - the app writes them to the user's
+# own profile. They are named anyway, because a rule that never fires costs
+# nothing and the one time it does it is somebody's health record.
+spoonbuddy-log.csv
+spoonbuddy-sleep.csv
+spoonbuddy-settings.txt
+spoonbuddy-pos.txt
+spoonbuddy-current.txt
+spoonbuddy-peer.txt
+spoonbuddy-feedback.txt
+spoonbuddy-error.log
+activities.csv
+stints.tsv
+paced.tsv
+sync-state.tsv
+last-activity.txt
+chart-days.txt
+
+# NO TRAILING SLASH on backup-*, and that is the point: `backup-*/` matches
+# DIRECTORIES ONLY, so a backup written as a single FILE slips past. A backup is a
+# backup either way.
+backup-*
+backups/
+logs/
+local/
+
+# ------------------------------------------------------------------ renders --
+# A RENDER OF THE RUNNING APP IS THE SAME DATA AS activities.csv, IN A FORM NO
+# IGNORE RULE AND NO GREP CAN READ. spoonbuddy-private #117 is the case: eight
+# pictures of the running app against real records, tracked for two days, past an
+# ignore file that was working perfectly and had never been told about the folder.
+review-shots/
+review-work/
+review-notes/
+screenshots/
+design/screenshots/
+*.pdf
+
+# ---------------------------------------------------------- credentials --
+google-services.json
+*.keystore
+*.jks
+keystore.properties
+.env
+secrets.json
+firebase-key.json
+
+# ------------------------------------------------------------------ os --
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# AND A RULE IS A DEFAULT, NOT A REFUSAL. tools\githooks\pre-commit refuses, and
+# it matches the file NAMES the app writes rather than the folders they land in.
+# Install it once per clone:
+#     git config core.hooksPath tools/githooks

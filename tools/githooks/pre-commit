@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# SpoonBuddy pre-commit hook - REFUSE JAQ'S OWN RECORDS AND ANY PICTURE OF THEM.
+#
+# spoonbuddy-private #117: eight PNGs of the running app against her real data, plus
+# her settings file and a copy of it out of a backup, were tracked for two days. The
+# ignore file was working - it had simply never been told about the folder, because
+# its rules named design/screenshots/ and four CSVs and the pictures matched nothing.
+#
+# WHY A HOOK AS WELL AS AN IGNORE RULE. An ignore rule is a DEFAULT and this is a
+# REFUSAL. It stops the three things a rule cannot:
+#   - `git add -f`, which is exactly what somebody types when a rule is in the way
+#   - a file staged before the rule that would have covered it was written
+#   - a folder nobody has thought of yet, because this matches the FILE NAMES the
+#     app actually writes, wherever they turn up
+#
+# IT ONLY EVER REFUSES A FILE BEING ADDED, NEVER ONE ALREADY TRACKED. That is what
+# keeps it off the committed fixtures - tests/fixture-log.csv, golden-log.csv,
+# golden-activities.csv, golden-settings.txt - without naming them here. A hand-kept
+# exemption list is the thing that goes stale; asking git what is already tracked
+# cannot. The same reasoning as shoot-review.ps1 asking `git check-ignore` rather
+# than parsing the rules itself.
+#
+# To install it, from the repository root:
+#     git config core.hooksPath tools/githooks
+# core.hooksPath is LOCAL CONFIG and is not cloned, so a fresh clone runs that line
+# once. The hook itself is tracked, which is what makes it recoverable at all.
+
+added=$(git diff --cached --name-only --diff-filter=A)
+[ -z "$added" ] && exit 0
+
+bad=""
+
+for f in $added; do
+    base=$(basename "$f")
+    hit=""
+
+    # The files the live app writes. Matched by NAME, at any depth, because the
+    # fault was never about where they sat.
+    case "$base" in
+        spoonbuddy-log.csv|spoonbuddy-sleep.csv|spoonbuddy-settings.txt| \
+        spoonbuddy-pos.txt|spoonbuddy-current.txt|spoonbuddy-peer.txt| \
+        spoonbuddy-feedback.txt|spoonbuddy-error.log|activities.csv| \
+        stints.tsv|paced.tsv|sync-state.tsv|last-activity.txt|chart-days.txt)
+            hit="a file the live app writes - this is her record, not a fixture" ;;
+    esac
+
+    # Anywhere a review, a shot or a backup is kept. A FOLDER match, because the
+    # next thing put in one will have an extension nobody thought of.
+    case "/$f" in
+        */review-shots/*|*/review-work/*|*/review-notes/*|review-shots/*|review-work/*|review-notes/*)
+            hit="review output - pictures of the running app against real data" ;;
+        */local/*|local/*)
+            hit="private/local/ is a scratch tree and is under no repository" ;;
+        */backups/*|backups/*|*/backup-*|backup-*)
+            hit="a backup of her data" ;;
+    esac
+
+    # A picture or a PDF of a screen. The dangerous class CONTENTS.md names: personal
+    # data in a form no ignore rule and no grep can read.
+    case "$base" in
+        *.png|*.jpg|*.jpeg|*.pdf|*.gif)
+            case "/$f" in
+                */screenshots/*|*/shots/*|*review*|*shoot*)
+                    hit="a render of the running app - no grep can read what is in it" ;;
+            esac ;;
+    esac
+
+    [ -n "$hit" ] && bad="$bad
+  $f
+      $hit"
+done
+
+[ -z "$bad" ] && exit 0
+
+echo ""
+echo "REFUSING THIS COMMIT: it adds files that look like Jaq's own records."
+echo "$bad"
+echo ""
+echo "Nothing has been unstaged and nothing has been deleted - the files are"
+echo "untouched on disk. If this is her data it belongs in %LOCALAPPDATA%\\SpoonBuddy"
+echo "or in the working root's local\\ folder, neither of which is in a repository."
+echo ""
+echo "IF IT IS GENUINELY A FIXTURE, GIVE IT A FIXTURE'S NAME - fixture-log.csv or"
+echo "golden-activities.csv - rather than passing --no-verify. A name that says what"
+echo "a file is survives the next person; a flag typed once does not."
+echo ""
+exit 1
