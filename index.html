@@ -35,8 +35,7 @@
 
   /* ---------- status strip ---------- */
   .status{background:var(--card); border-bottom:1px solid var(--line)}
-  .status .wrap{padding-top:22px; padding-bottom:22px;
-    display:grid; grid-template-columns:1fr 1fr; gap:28px}
+  .status .wrap{padding-top:22px; padding-bottom:22px}
   .panel h2{margin:0 0 3px; font-size:1rem; letter-spacing:.01em}
   .panel .stage{font-size:.75rem; text-transform:uppercase; letter-spacing:.1em;
     color:var(--muted); margin:0 0 6px}
@@ -51,10 +50,6 @@
   .days li.done .spoon{fill:url(#woodgrad)}
   .beta-note{margin-top:11px; font-size:.88rem; color:var(--note);
     background:var(--note-bg); padding:9px 12px; border-radius:10px}
-  @media (max-width:640px){
-    .status .wrap{grid-template-columns:1fr; gap:22px}
-    .panel + .panel{border-top:1px solid var(--line); padding-top:20px}
-  }
 
   /* ---------- page ---------- */
   header.hero{padding:48px 0 8px; text-align:center}
@@ -66,6 +61,7 @@
   main section{padding:34px 0; border-top:1px solid var(--line)}
   main section:first-of-type{border-top:0}
   h2{font-size:1.35rem; margin:0 0 12px; letter-spacing:-.01em}
+  h3{font-size:1.05rem; margin:22px 0 8px; letter-spacing:-.01em}
   p{margin:0 0 14px}
   .lead{font-size:1.06rem}
   .btns{display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 6px}
@@ -100,29 +96,24 @@
 </svg>
 
 <!-- ========================================================================
-     STATUS STRIP: alpha on the left, closed beta on the right.
-     Nothing in here is edited by hand. The alpha numbers come live from
-     the GitHub API, and the beta side reads status.json in this folder.
+     STATUS STRIP. One panel, and it reports the closed test.
+
+     THE ALPHA PANEL AND ITS DOWNLOAD COUNTS CAME OFF ON 15 SEP 2026, when the
+     app went onto Google Play. It counted .apk and .zip downloads from the
+     GitHub releases, which stopped meaning anything the moment the Android
+     route became the Play Store.
+
+     Nothing here is edited by hand. It reads status.json in this folder.
      ===================================================================== -->
 <div class="status">
   <div class="wrap">
 
     <div class="panel">
-      <p class="stage">Now</p>
-      <h2>Alpha</h2>
-      <p id="alphaSub">Early, rough, and installed by hand.</p>
-      <div class="counts" id="alphaCounts" hidden>
-        <div class="count"><b id="nWin">0</b><span>Windows downloads</span></div>
-        <div class="count"><b id="nDroid">0</b><span>Android downloads</span></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <p class="stage" id="betaStage">Next</p>
-      <h2 id="betaTitle">Closed beta</h2>
+      <p class="stage" id="betaStage">Now</p>
+      <h2 id="betaTitle">Closed testing</h2>
       <p id="betaSub">Not open yet.</p>
       <div class="counts" id="betaCounts" hidden>
-        <div class="count"><b id="nTesters">0</b><span>testers signed up</span></div>
+        <div class="count"><b id="nTesters">0</b><span>testers opted in</span></div>
         <div class="count"><b id="nDays">0</b><span>days of 14</span></div>
       </div>
       <ul class="days" id="dayRow" aria-hidden="true"></ul>
@@ -158,39 +149,52 @@
   </section>
 
   <!-- ==================================================================
-       ALPHA BLOCK. Remove this whole <section> when beta starts and the
-       alpha install files come off the repo. Replace it with a "join the
-       beta" link to the Play Store closed test opt-in URL.
+       GET IT. The Android half is an invitation rather than a download,
+       and will stay that way until the closed test has run its course and
+       production access is granted. Replace this section with a plain
+       Play Store link when that happens.
        =============================================================== -->
   <section id="get">
     <h2>Get it</h2>
-    <p>SpoonBuddy is at the alpha stage, which means early, rough and changing often. Things
-    will look unfinished and some of them won't work. Please don't rely on it for anything
-    that matters yet.</p>
+
+    <h3>Android</h3>
+    <p>SpoonBuddy is on Google Play, in <strong>closed testing</strong>. That means it is not
+    public yet and you cannot find it by searching; you join the testers and install it from
+    there.</p>
+    <p>Google asks for twelve testers, signed up for fourteen days in a row, before an app like
+    this can be released properly. So joining is a real favour and not a formality.</p>
+    <p><strong>It costs testers nothing.</strong> The app is paid on the store, but testers go
+    through a test purchase that takes no money.</p>
     <div class="btns">
-      <!-- FIXED ASSET NAMES, so these never need editing again. /releases/latest/
-           follows whichever release is marked Latest, and every release from 0.2.0
-           attaches each artefact TWICE - once versioned, so somebody with three
-           downloads can tell them apart, and once under the fixed name these point at.
-           They were pinned to v0.1.3 until 2026-08-23, which is a link that goes stale
-           the moment anything ships and had already gone stale three times.
-           IF EITHER OF THESE 404s, the release is missing its fixed-name copy. -->
-      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy-windows.zip">Windows (.zip)</a>
-      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy.apk">Android (.apk)</a>
+      <a class="btn" href="https://groups.google.com/g/spoonbuddy-testers">Ask to join the testers</a>
     </div>
-    <p class="small">Both files download straight away. Neither is in an app store yet, so both
-    need installing by hand. Instructions come with the download. If you get stuck partway
-    through, tell me which step you reached and I'll pick it up from there. Everything is also
-    on the
-    <a href="https://github.com/JaqK23/spoonbuddy/releases">releases page</a> if you would
-    rather see the list.</p>
+    <p class="small">Ask to join the group, and the opt-in link comes back to you. You'll need
+    an Android phone, and the Google account your Play Store is signed in with. The test is
+    open in the UK, US and Canada at the moment; if you're somewhere else, say so and it can be
+    opened up.</p>
+
+    <h3>Windows</h3>
+    <p>The desktop version is free, and always will be. It's early and rough in places, so
+    please don't rely on it for anything that matters yet.</p>
+    <div class="btns">
+      <a class="btn" href="https://github.com/JaqK23/spoonbuddy/releases/latest/download/SpoonBuddy-windows.zip">Windows (.zip)</a>
+    </div>
+    <p class="small">It downloads straight away and installs by hand; instructions come with it.
+    Your antivirus may warn you about it, because the certificate belongs to a developer it has
+    never heard of rather than because anything is wrong. Everything is also on the
+    <a href="https://github.com/JaqK23/spoonbuddy/releases">releases page</a> if you'd rather
+    see the list. If you get stuck partway through, tell me which step you reached and I'll
+    pick it up from there.</p>
   </section>
 
   <section>
     <h2>What it costs</h2>
-    <p>Nothing at the moment. While it's in testing, both versions are free.</p>
-    <p>When the Android app reaches the Play Store properly there will be a charge on it.
-    I'll say what that is well before it happens, and testers won't be caught out by it.</p>
+    <p>The Windows app is free. The Android app is paid, once, with no subscription and nothing
+    held back behind a further payment. While it's in closed testing, testers pay nothing.</p>
+    <p>If money is tight, write to
+    <a href="mailto:spoonbuddy+support@ik.me">spoonbuddy+support@ik.me</a> and ask for a free
+    copy. There's no form and nothing to prove. That offer is not a gesture; it's the reason
+    the app is priced the way it is rather than carved into a free half and a paid half.</p>
   </section>
 
   <section>
@@ -211,19 +215,18 @@
 
 <script>
 /* ======================================================================
-   The strip at the top of this page updates itself.
+   The strip at the top of this page updates itself from status.json in
+   this same folder. Edit that file and push it. Do not edit this script.
 
-   Alpha numbers  : pulled live from the public GitHub API, counting
-                    downloads of every .zip and .apk across all releases.
-                    Nothing to maintain.
-   Beta numbers   : read from status.json in this same folder. Edit that
-                    file and push it. Do not edit this script.
+   THE NUMBER IN status.json COMES FROM THE PLAY CONSOLE APP DASHBOARD,
+   under "Have at least 12 testers opted-in to your closed test". Play has
+   no API for it, and the Google Group's membership is a different and
+   always larger number, because joining the group is not opting in.
 
-   If either source is unavailable the page still renders sensibly, so a
-   rate limit or a missing file never leaves a broken strip on screen.
+   If status.json cannot be read the page still renders sensibly, so a
+   missing file never leaves a broken strip on screen.
    ==================================================================== */
 
-const REPO   = 'JaqK23/spoonbuddy';
 const NEEDED = 12;      // testers Google asks for
 const DAYS   = 14;      // consecutive days Google asks for
 
@@ -231,8 +234,7 @@ const DAYS   = 14;      // consecutive days Google asks for
 const FALLBACK = {
   testers: 0,
   betaStartDate: null,
-  betaExpected: null,
-  showDownloadCount: true
+  betaExpected: null
 };
 
 (async function () {
@@ -243,7 +245,6 @@ const FALLBACK = {
   } catch (e) { /* keep the fallback, say nothing */ }
 
   renderBeta(cfg);
-  if (cfg.showDownloadCount) renderAlpha();
 })();
 
 
@@ -267,9 +268,6 @@ function renderBeta(cfg) {
 
   document.getElementById('nTesters').textContent = testers;
   document.getElementById('nDays').textContent = day;
-  // Revealed only once there are real figures behind them - the same thing the
-  // alpha panel does with alphaCounts. Without JS these stay hidden and the
-  // panel's own text carries the meaning.
   document.getElementById('betaCounts').hidden = false;
 
   const row = document.getElementById('dayRow');
@@ -290,57 +288,33 @@ function renderBeta(cfg) {
 
   if (done) {
     stage.textContent = 'Done';
-    title.textContent = 'Closed beta complete';
+    title.textContent = 'Closed testing complete';
     sub.textContent = 'Fourteen days, twelve testers. Thank you, all of you.';
     note.textContent = 'Next comes applying to Google for a public release. That part is on me.';
   } else if (!cfg.betaStartDate) {
-    stage.textContent = 'Next';
-    title.textContent = 'Closed beta';
-    sub.textContent = cfg.betaExpected
-      ? 'Expected to start ' + cfg.betaExpected + '.'
-      : 'Not started yet.';
+    stage.textContent = 'Now';
+    title.textContent = 'Closed testing';
+    sub.textContent = testers
+      ? 'Open, and taking testers.'
+      : 'Open, and looking for testers.';
     note.textContent = short
       ? 'Google asks for ' + NEEDED + ' testers before the 14 days can begin. ' +
-        people(short) + ' and the clock starts.'
-      : 'Enough people signed up. The clock starts as soon as the test opens.';
+        people(short) + ' and the clock starts' +
+        (cfg.betaExpected ? ', expected ' + cfg.betaExpected + '.' : '.')
+      : 'Enough people are signed up. The clock starts now.';
   } else if (short) {
     stage.textContent = 'Running';
-    title.textContent = 'Closed beta, day ' + day + ' of ' + DAYS;
-    sub.textContent = 'Currently ' + testers + ' testers signed up. Google asks for ' + NEEDED + '.';
+    title.textContent = 'Closed testing, day ' + day + ' of ' + DAYS;
+    sub.textContent = 'Currently ' + testers + ' testers opted in. Google asks for ' + NEEDED + '.';
     note.textContent = 'Nothing for existing testers to do. Your days keep counting either way. ' +
       'We just need ' + people(short) + ' to sign up.';
   } else {
     stage.textContent = 'Running';
-    title.textContent = 'Closed beta, day ' + day + ' of ' + DAYS;
-    sub.textContent = testers + ' testers signed up. Google asks for ' + NEEDED + '.';
+    title.textContent = 'Closed testing, day ' + day + ' of ' + DAYS;
+    sub.textContent = testers + ' testers opted in. Google asks for ' + NEEDED + '.';
     note.textContent = 'Nothing to do. You don’t have to open the app every day. The count ' +
       'only asks that you stay signed up, so low days cost nothing. That is rather the point.';
   }
-}
-
-
-async function renderAlpha() {
-  try {
-    const res = await fetch('https://api.github.com/repos/' + REPO + '/releases');
-    if (!res.ok) return;                      // rate limited or offline, leave the line as it is
-    const releases = await res.json();
-
-    let win = 0, droid = 0;
-    for (const rel of releases) {
-      for (const asset of (rel.assets || [])) {
-        const n = asset.name.toLowerCase();
-        const c = asset.download_count || 0;
-        if (n.endsWith('.apk')) droid += c;
-        else if (n.endsWith('.zip')) win += c;
-      }
-    }
-
-    document.getElementById('nWin').textContent = win;
-    document.getElementById('nDroid').textContent = droid;
-    document.getElementById('alphaCounts').hidden = false;
-    document.getElementById('alphaSub').textContent =
-      'Early, rough, and installed by hand. Downloads so far:';
-  } catch (e) { /* leave the plain line in place */ }
 }
 </script>
 </body>
