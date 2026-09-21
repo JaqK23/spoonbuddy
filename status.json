@@ -1,6 +1,6 @@
 {
   "_comment": "Edit this file to update the strip at the top of the site. Nothing else needs touching. Push it and the page picks it up.",
-  "testers": 3,
+  "testers": 4,
   "betaStartDate": null,
   "betaExpected": "as soon as 12 people have joined",
   "_testers": "How many people are opted in to the closed test right now. THE NUMBER COMES FROM THE PLAY CONSOLE APP DASHBOARD, under 'Have at least 12 testers opted-in to your closed test'. Group membership is not the same thing and is always higher.",
